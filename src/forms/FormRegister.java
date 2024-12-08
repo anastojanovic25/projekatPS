@@ -35,7 +35,7 @@ public class FormRegister extends javax.swing.JDialog {
          jTxtRegEmail.getDocument().addDocumentListener(new DocumentListener(){
             @Override
             public void insertUpdate(DocumentEvent e) {
-                System.out.println(".insertUpdate()");
+                
                 validate(e);
             }
 
@@ -55,12 +55,12 @@ public class FormRegister extends javax.swing.JDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                validate(e);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                
             }
             
         
@@ -158,16 +158,12 @@ public class FormRegister extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(87, 87, 87)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(82, 82, 82)
-                                .addComponent(jLabelPassword)))
-                        .addGap(45, 45, 45)
+                            .addComponent(jLabelEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelPassword))
+                        .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jComboBoxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -297,13 +293,8 @@ public class FormRegister extends javax.swing.JDialog {
              JOptionPane.showMessageDialog(this, "Niste popunili na odgovarajuci nacin ", "Greska", JOptionPane.ERROR_MESSAGE);
 
        }
-        else if(password.length()<5){
-            validiranje(textFields);
-           JOptionPane.showMessageDialog(this, "Lozinka mora da sadrzi minimum 5 karaktera", "Greska", JOptionPane.ERROR_MESSAGE);
-       }else if(!password.equals(passwordProvera)){
-           JOptionPane.showMessageDialog(this, "Nisu iste lozinke", "Greska", JOptionPane.ERROR_MESSAGE);
-    
-       }
+        
+       
         else{
             validiranje(textFields);
             if(jCheckBoxCond.isSelected()==false){
@@ -313,8 +304,11 @@ public class FormRegister extends javax.swing.JDialog {
                 int response = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da su podaci tacni?", "Registracija pri kraju", JOptionPane.YES_NO_OPTION);
                 switch (response) {
                     case JOptionPane.YES_OPTION:
-                    JOptionPane.showMessageDialog(this, "Uspesno registrovani!");
-                    Controller.getInstance().ubaciKorisnika(ime, prezime, broj,email ,password,pol);
+                     String randomPass=Controller.getInstance().generateRandomPassword();
+                     String mejl=jTxtRegEmail.getText();
+                     Controller.getInstance().sendMail(email, randomPass);
+                     JOptionPane.showMessageDialog(this, "Uspesno registrovani!");
+                     //Controller.getInstance().ubaciKorisnika(ime, prezime, broj,email ,password,pol);
                     this.dispose();
                     break;
                     case JOptionPane.NO_OPTION:

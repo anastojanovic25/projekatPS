@@ -13,22 +13,24 @@ import java.util.Date;
 public class Predstava {
     private long id;
     private String naziv;
-    private Korisnik korisnikUnos;
+    private Reziser reziser;
     private int trajanje;
-    private Date datumOdrzavanja;
     private Zanr zanr;
-
+    private Korisnik korisnikUnos;
+    
     public Predstava() {
     }
 
-    public Predstava(long id, String naziv, Korisnik korisnikUnos, int trajanje, Date datumOdrzavanja, Zanr zanr) {
+    public Predstava(long id, String naziv, Reziser reziser, int trajanje, Zanr zanr, Korisnik korisnikUnos) {
         this.id = id;
         this.naziv = naziv;
-        this.korisnikUnos = korisnikUnos;
+        this.reziser = reziser;
         this.trajanje = trajanje;
-        this.datumOdrzavanja = datumOdrzavanja;
         this.zanr = zanr;
+        this.korisnikUnos = korisnikUnos;
     }
+
+   
 
 
 
@@ -64,13 +66,7 @@ public class Predstava {
         this.trajanje = trajanje;
     }
 
-    public Date getDatumOdrzavanja() {
-        return datumOdrzavanja;
-    }
-
-    public void setDatumOdrzavanja(Date datumOdrzavanja) {
-        this.datumOdrzavanja = datumOdrzavanja;
-    }
+    
 
     @Override
     public String toString() {
@@ -83,6 +79,14 @@ public class Predstava {
 
     public void setZanr(Zanr zanr) {
         this.zanr = zanr;
+    }
+
+    public Reziser getReziser() {
+        return reziser;
+    }
+
+    public void setReziser(Reziser reziser) {
+        this.reziser = reziser;
     }
     
     

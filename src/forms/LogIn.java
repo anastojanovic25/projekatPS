@@ -48,6 +48,13 @@ public class LogIn extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 255));
         jLabel1.setText("Prijava za registrovane korisnike");
 
+        jTxtEmail.setText("ana.s@gmail.com");
+        jTxtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTxtEmailActionPerformed(evt);
+            }
+        });
+
         jButtonLogIn.setBackground(new java.awt.Color(51, 153, 255));
         jButtonLogIn.setText("Prijava");
         jButtonLogIn.addActionListener(new java.awt.event.ActionListener() {
@@ -73,6 +80,8 @@ public class LogIn extends javax.swing.JFrame {
                 jLabelRegMouseClicked(evt);
             }
         });
+
+        jTxtPassword.setText("ana");
 
         jButton1.setText("Prikazi lozinku");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -176,6 +185,10 @@ public class LogIn extends javax.swing.JFrame {
         jTxtPassword.setEchoChar((char)0);
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTxtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTxtEmailActionPerformed
 
     /**
      * @param args the command line arguments

@@ -5,41 +5,48 @@
 package forms;
 
 import controller.Controller;
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import model.Korisnik;
 import model.Predstava;
+import model.Repertoar;
+import tableModel.TableModelRepertoar;
 
 /**
  *
  * @author Ana
  */
 public class MainForm extends javax.swing.JFrame {
-    List<Predstava> repertoar=Controller.getInstance().vratiListuPredstava();
+    List<Repertoar> lista=Controller.getInstance().vratiListuRepertoara();
     Korisnik korisnik;
     /**
      * Creates new form MainForm
      */
     public MainForm(Korisnik k) {
         initComponents();
+        popuniComboBox();
         jLabel2.setText(k.getIme());
         jLabel3.setText(k.getPrezime());
-        TableModelRepertoar tmr=new TableModelRepertoar(repertoar);
-        jTableRepertoar.setModel(tmr);
-        jTableRepertoar.setVisible(false);
-        jButtonObrisi.setVisible(false);
-        jButtonAzuriraj.setVisible(false);
         
+        TableModelRepertoar tmr=new TableModelRepertoar(lista);
+        jTableRepertoar.setModel(tmr);
+       
+        
+      
         korisnik=k;
         
-        
-        jTableRepertoar.getColumnModel().getColumn(2).setCellRenderer(new TableCellRenderer() {
+        //za datum u tebli
+        jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
             @Override
@@ -60,6 +67,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         
+        
     }
 
     /**
@@ -77,11 +85,23 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRepertoar = new javax.swing.JTable();
         jButtonObrisi = new javax.swing.JButton();
-        jButtonAzuriraj = new javax.swing.JButton();
+        jButtonDetalji = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldDay = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextFieldMonth = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextFieldYear = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jButtonFiltriraj = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItemPrikazi = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,24 +127,33 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jButtonAzuriraj.setText("Azuriraj");
-        jButtonAzuriraj.addActionListener(new java.awt.event.ActionListener() {
+        jButtonDetalji.setText("Detalji");
+        jButtonDetalji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAzurirajActionPerformed(evt);
+                jButtonDetaljiActionPerformed(evt);
             }
         });
+
+        jLabel5.setText("Datum:");
+
+        jLabel6.setText("/");
+
+        jLabel7.setText("/");
+
+        jLabel8.setText("Predstava:");
+
+        jButtonFiltriraj.setText("Filtriraj");
+        jButtonFiltriraj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrirajActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Dan       Mesec   Godina");
 
         jMenu1.setText("Repertoar");
 
-        jMenuItemPrikazi.setText("Prikazi");
-        jMenuItemPrikazi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemPrikaziActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemPrikazi);
-
-        jMenuItem1.setText("Dodaj novu predstavu");
+        jMenuItem1.setText("Dodaj");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -134,6 +163,26 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Predstave");
+
+        jMenuItem4.setText("Prikazi sve predstave");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        jMenuItem5.setText("Dodaj novu predstavu");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -141,51 +190,89 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(243, 243, 243)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonObrisi)
-                        .addGap(83, 83, 83)
-                        .addComponent(jButtonAzuriraj)
-                        .addGap(150, 150, 150)))
-                .addGap(0, 349, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(85, 85, 85)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1102, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldDay, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
+                        .addGap(5, 5, 5)
+                        .addComponent(jTextFieldMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addComponent(jButtonFiltriraj)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(383, 383, 383)
+                .addComponent(jButtonDetalji)
+                .addGap(163, 163, 163)
+                .addComponent(jButtonObrisi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(99, 99, 99)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addComponent(jButtonFiltriraj))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextFieldDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(jTextFieldMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAzuriraj)
-                    .addComponent(jButtonObrisi))
-                .addContainerGap(115, Short.MAX_VALUE))
+                    .addComponent(jLabel8)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(298, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonObrisi)
+                            .addComponent(jButtonDetalji))
+                        .addGap(227, 227, 227))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItemPrikaziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPrikaziActionPerformed
-         jTableRepertoar.setVisible(true);
-          jButtonObrisi.setVisible(true);
-        jButtonAzuriraj.setVisible(true);
-
-    }//GEN-LAST:event_jMenuItemPrikaziActionPerformed
 
     private void jButtonObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonObrisiActionPerformed
         
@@ -193,72 +280,117 @@ public class MainForm extends javax.swing.JFrame {
         if(selektovano==-1){
             JOptionPane.showMessageDialog(this,"Morate da oznacite sta zelite da obrisete", "GRESKA", JOptionPane.ERROR_MESSAGE);
         }else{
-            List<Predstava> lista=Controller.getInstance().vratiListuPredstava();
-           
-            for (Predstava predstava : lista) {
-                System.out.println(predstava.getId());
-            }
-            Controller.getInstance().obrisiPredstavu(lista.get(selektovano));
-            JOptionPane.showMessageDialog(this,"Uspesno obrisano", "Uspesno", JOptionPane.INFORMATION_MESSAGE);
+            Repertoar r=lista.get(selektovano);
+            Controller.getInstance().obrisiPredstavuURepertoaru(r);
             azurirajTabelu();
         }
             
-
-        
-        
-
-
     }//GEN-LAST:event_jButtonObrisiActionPerformed
 
-    private void jButtonAzurirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAzurirajActionPerformed
-        List<Predstava> lista=Controller.getInstance().vratiListuPredstava();
-          int selektovano=jTableRepertoar.getSelectedRow();
-        if(selektovano==-1){
-            JOptionPane.showMessageDialog(this,"Morate da oznacite sta zelite da azurirate", "GRESKA", JOptionPane.ERROR_MESSAGE);
-        }else{
-           Predstava p=lista.get(selektovano);
-            System.out.println(p.getId());
-           AddUpdateForm af=new AddUpdateForm(this, true, p, korisnik);
-           af.setVisible(true);
-           azurirajTabelu();
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
+        AddRepertoar ar=new AddRepertoar(this, true,null);
+        ar.setVisible(true);
+        azurirajTabelu();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    
+        AddPerformance ap=new AddPerformance(this, true,korisnik);
+        ap.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        ShowPerformances sp=new ShowPerformances(this, true, korisnik);
+        sp.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jButtonFiltrirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrirajActionPerformed
+        if((jTextFieldDay.getText().trim().equals("") || jTextFieldMonth.getText().trim().equals("") || jTextFieldYear.getText().trim().equals("")) && jComboBox1.getSelectedItem()==null){
+            azurirajTabelu();
+            JOptionPane.showMessageDialog(this,"Morate uneti odgovarajuce parametre", "GRESKA", JOptionPane.ERROR_MESSAGE);
+        }
+        else if((jTextFieldDay.getText().trim().equals("") || jTextFieldMonth.getText().trim().equals("") || jTextFieldYear.getText().trim().equals("")) && jComboBox1.getSelectedItem()!=null){
+           Predstava p=(Predstava) jComboBox1.getSelectedItem();
+            vratiFiltriranoSaPredstavom(p);
+        }else if(!(jTextFieldDay.getText().trim().equals("") || jTextFieldMonth.getText().trim().equals("") || jTextFieldYear.getText().trim().equals("")) && jComboBox1.getSelectedItem()==null){
+            String dan=jTextFieldDay.getText();
+            String mesec=jTextFieldMonth.getText();
+            String godina=jTextFieldYear.getText();
+            String datum=dan+"."+mesec+"."+godina;
+            if(!datum.matches("^(0?[1-9]|[12][0-9]|3[01])\\.(0?[1-9]|1[0-2])\\.(\\d+)$")){
+                 JOptionPane.showMessageDialog(this,"Morate uneti datum u odgovarajucem formatu", "GRESKA", JOptionPane.ERROR_MESSAGE);
+      
+            }else{
+                try {
+                    vratiFiltriranoSaDatumom(datum);
+                } catch (ParseException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else{
+            Predstava p=(Predstava) jComboBox1.getSelectedItem();
+            vratiFiltriranoSaPredstavom(p);
+            String dan=jTextFieldDay.getText();
+            String mesec=jTextFieldMonth.getText();
+            String godina=jTextFieldYear.getText();
+            String datum=dan+"."+mesec+"."+godina;
+            if(!datum.matches("^(0?[1-9]|[12][0-9]|3[01])\\.(0?[1-9]|1[0-2])\\.(\\d+)$")){
+                 JOptionPane.showMessageDialog(this,"Morate uneti datum u odgovarajucem formatu", "GRESKA", JOptionPane.ERROR_MESSAGE);
+      
+            }else{
+                vratiFiltriranoOba(p,datum);
+            }
         }
 
 
 
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonAzurirajActionPerformed
+    }//GEN-LAST:event_jButtonFiltrirajActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-     
-           
-           AddUpdateForm af=new AddUpdateForm(this, true, null, korisnik);//korisnik treba koji je trenutni
-           af.setVisible(true);
-           azurirajTabelu();
+    private void jButtonDetaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetaljiActionPerformed
+        int selektovano=jTableRepertoar.getSelectedRow();
+        if(selektovano==-1){
+            JOptionPane.showMessageDialog(this,"Morate da oznacite", "GRESKA", JOptionPane.ERROR_MESSAGE);
+        }else{
+            Repertoar r=lista.get(selektovano);
+           RepertoarDetails rd=new RepertoarDetails(this, true, r);
+           rd.setVisible(true);
+        }
 
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jButtonDetaljiActionPerformed
 
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAzuriraj;
+    private javax.swing.JButton jButtonDetalji;
+    private javax.swing.JButton jButtonFiltriraj;
     private javax.swing.JButton jButtonObrisi;
+    private javax.swing.JComboBox<Predstava> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItemPrikazi;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableRepertoar;
+    private javax.swing.JTextField jTextFieldDay;
+    private javax.swing.JTextField jTextFieldMonth;
+    private javax.swing.JTextField jTextFieldYear;
     // End of variables declaration//GEN-END:variables
 
     private void azurirajTabelu() {
-        List<Predstava> repertoar2=Controller.getInstance().vratiListuPredstava();
-        TableModelRepertoar tmr=new TableModelRepertoar(repertoar2);
+       List<Repertoar> lista2=Controller.getInstance().vratiListuRepertoara();
+         TableModelRepertoar tmr=new TableModelRepertoar(lista2);
         jTableRepertoar.setModel(tmr);
-        
-                  jTableRepertoar.getColumnModel().getColumn(2).setCellRenderer(new TableCellRenderer() {
+            jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
             @Override
@@ -280,5 +412,90 @@ public class MainForm extends javax.swing.JFrame {
         });
         
 
+    }
+    public void popuniComboBox(){
+        List<Predstava> lista=Controller.getInstance().vratiListuPredstava();
+        jComboBox1.addItem(null);
+        for (Predstava predstava : lista) {
+            jComboBox1.addItem(predstava);
+        }
+    }
+
+    private void vratiFiltriranoSaPredstavom(Predstava p) {
+         List<Repertoar> listaRep=Controller.getInstance().vratiListuRepertoaraOdgovarajucePredstave(p);
+         TableModelRepertoar tmr=new TableModelRepertoar(listaRep);
+        jTableRepertoar.setModel(tmr);
+            jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = new JLabel();
+                if (value instanceof Date) {
+                    label.setText(formatter.format(value));
+                }
+                label.setOpaque(true);
+                if (isSelected) {
+                    label.setBackground(table.getSelectionBackground());
+                    label.setForeground(table.getSelectionForeground());
+                } else {
+                    label.setBackground(table.getBackground());
+                    label.setForeground(table.getForeground());
+                }
+                return label;
+            }
+        });
+    }
+
+    private void vratiFiltriranoSaDatumom(String datum) throws ParseException {
+         List<Repertoar> listaRep=Controller.getInstance().vratiListuRepertoaraDatum(datum);
+         TableModelRepertoar tmr=new TableModelRepertoar(listaRep);
+        jTableRepertoar.setModel(tmr);
+            jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = new JLabel();
+                if (value instanceof Date) {
+                    label.setText(formatter.format(value));
+                }
+                label.setOpaque(true);
+                if (isSelected) {
+                    label.setBackground(table.getSelectionBackground());
+                    label.setForeground(table.getSelectionForeground());
+                } else {
+                    label.setBackground(table.getBackground());
+                    label.setForeground(table.getForeground());
+                }
+                return label;
+            }
+        });
+    }
+
+    private void vratiFiltriranoOba(Predstava p, String datum) {
+        List<Repertoar> listaRep=Controller.getInstance().vratiListuRepertoaraOba(datum,p);
+         TableModelRepertoar tmr=new TableModelRepertoar(listaRep);
+        jTableRepertoar.setModel(tmr);
+            jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = new JLabel();
+                if (value instanceof Date) {
+                    label.setText(formatter.format(value));
+                }
+                label.setOpaque(true);
+                if (isSelected) {
+                    label.setBackground(table.getSelectionBackground());
+                    label.setForeground(table.getSelectionForeground());
+                } else {
+                    label.setBackground(table.getBackground());
+                    label.setForeground(table.getForeground());
+                }
+                return label;
+            }
+        });
     }
 }

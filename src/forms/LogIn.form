@@ -103,6 +103,12 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTxtEmail">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ana.s@gmail.com"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTxtEmailActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonLogIn">
       <Properties>
@@ -154,6 +160,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="jTxtPassword">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ana"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>

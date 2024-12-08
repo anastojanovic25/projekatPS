@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package forms;
+package tableModel;
 
-import java.util.ArrayList;
+import forms.*;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import model.Predstava;
@@ -13,10 +13,10 @@ import model.Predstava;
  *
  * @author Ana
  */
-public class TableModelRepertoar extends AbstractTableModel {
-    List<Predstava> lista;
-    String[] kolone={"Naziv","Duzina trajanja(minuti)","Datum","Zanr","Korisnik"};
-    public TableModelRepertoar(List<Predstava> lista){
+public class TableModelPerformance extends AbstractTableModel{
+     List<Predstava> lista;
+    String[] kolone={"Naziv","Reziser","Duzina trajanja(minuti)","Zanr","Korisnik"};
+    public TableModelPerformance(List<Predstava> lista){
         this.lista=lista;
     } 
     @Override
@@ -36,13 +36,13 @@ public class TableModelRepertoar extends AbstractTableModel {
             case 0:
                 return p.getNaziv();
             case 1:
-                return p.getTrajanje();
+                return p.getReziser().getIme()+" "+p.getReziser().getPrezime();
             case 2:
-                return p.getDatumOdrzavanja();
+                return p.getTrajanje();
             case 3:
                 return p.getZanr();
             case 4:
-                return p.getKorisnikUnos();
+                return p.getKorisnikUnos().getIme();
             default:
                 return "N/A";
         }
@@ -55,6 +55,5 @@ public class TableModelRepertoar extends AbstractTableModel {
     public List<Predstava> getLista() {
         return lista;
     }
-    
     
 }
