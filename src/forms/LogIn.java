@@ -173,9 +173,10 @@ public class LogIn extends javax.swing.JFrame {
 
     private void jLabelRegMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegMouseClicked
         
-                FormRegister formRegister= new FormRegister(this, true);
+                FormRegister0 formRegister= new FormRegister0(this, true);
                 formRegister.setLocationRelativeTo(null);
                 formRegister.setVisible(true);
+                
                 
     }//GEN-LAST:event_jLabelRegMouseClicked
 

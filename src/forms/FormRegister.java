@@ -283,8 +283,8 @@ public class FormRegister extends javax.swing.JDialog {
             textFields.add(jTxtRegSurname);
             textFields.add(jTxtRegNumber);
             textFields.add(jTxtRegEmail);
-            textFields.add(jTxtRegPassword);
-            textFields.add(jTxtRegPassword1);
+            //textFields.add(jTxtRegPassword);
+            //textFields.add(jTxtRegPassword1);
             validiranje(textFields);
              JOptionPane.showMessageDialog(this, "Niste popunili obavezna polja", "Greska", JOptionPane.ERROR_MESSAGE);
        }else if(!validacijaPodataka()){
@@ -366,9 +366,9 @@ public class FormRegister extends javax.swing.JDialog {
         String prezime=jTxtRegSurname.getText();
         String broj=jTxtRegNumber.getText();
         String email=jTxtRegEmail.getText();
-        String password=jTxtRegPassword.getText();
+        //String password=jTxtRegPassword.getText();
         String pol=(String) jComboBoxGender.getSelectedItem();
-        if(ime.trim().isEmpty() || prezime.trim().isEmpty() || broj.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || pol==null){
+        if(ime.trim().isEmpty() || prezime.trim().isEmpty() || broj.trim().isEmpty() || email.trim().isEmpty() || pol==null){
             return false;
         }
         
@@ -393,7 +393,7 @@ public class FormRegister extends javax.swing.JDialog {
         String prezime=jTxtRegSurname.getText();
         String broj=jTxtRegNumber.getText();
         String email=jTxtRegEmail.getText();
-        String password=String.valueOf(jTxtRegPassword.getPassword());
+     
         
         
         if(!ime.matches("[a-zA-Z]+") || !prezime.matches("[a-zA-Z]+") || !email.matches("^[a-z0-9.]+@[a-z]{1,20}\\.[a-z]{2,6}$")){

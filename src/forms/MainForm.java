@@ -6,6 +6,7 @@ package forms;
 
 import controller.Controller;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,8 +36,8 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm(Korisnik k) {
         initComponents();
         popuniComboBox();
-        jLabel2.setText(k.getIme());
-        jLabel3.setText(k.getPrezime());
+        jLabel2.setText(k.getIme()+" "+k.getPrezime());
+        
         
         TableModelRepertoar tmr=new TableModelRepertoar(lista);
         jTableRepertoar.setModel(tmr);
@@ -45,7 +46,7 @@ public class MainForm extends javax.swing.JFrame {
       
         korisnik=k;
         
-        //za datum u tebli
+        //za datum u tabeli
         jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -56,6 +57,7 @@ public class MainForm extends javax.swing.JFrame {
                     label.setText(formatter.format(value));
                 }
                 label.setOpaque(true);
+                
                 if (isSelected) {
                     label.setBackground(table.getSelectionBackground());
                     label.setForeground(table.getSelectionForeground());
@@ -81,7 +83,6 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRepertoar = new javax.swing.JTable();
         jButtonObrisi = new javax.swing.JButton();
@@ -96,6 +97,7 @@ public class MainForm extends javax.swing.JFrame {
         jButtonFiltriraj = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jButtonOcistiFilter = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -151,6 +153,13 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel4.setText("Dan       Mesec   Godina");
 
+        jButtonOcistiFilter.setText("Ocisti filter");
+        jButtonOcistiFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOcistiFilterActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Repertoar");
 
         jMenuItem1.setText("Dodaj");
@@ -202,29 +211,29 @@ public class MainForm extends javax.swing.JFrame {
                                 .addGap(85, 85, 85)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1102, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextFieldDay, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addGap(5, 5, 5)
-                        .addComponent(jTextFieldMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61)
-                        .addComponent(jButtonFiltriraj)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldDay, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addGap(5, 5, 5)
+                                .addComponent(jTextFieldMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)
+                                .addComponent(jButtonFiltriraj)
+                                .addGap(31, 31, 31)
+                                .addComponent(jButtonOcistiFilter)))
+                        .addContainerGap(857, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(383, 383, 383)
                 .addComponent(jButtonDetalji)
@@ -239,11 +248,12 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31)
-                        .addComponent(jButtonFiltriraj))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonFiltriraj)
+                            .addComponent(jButtonOcistiFilter)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -359,15 +369,24 @@ public class MainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonDetaljiActionPerformed
 
+    private void jButtonOcistiFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOcistiFilterActionPerformed
+        jTextFieldDay.setText("");
+        jTextFieldYear.setText("");
+        jTextFieldMonth.setText("");
+        jComboBox1.setSelectedItem(null);
+        
+        azurirajTabelu();
+    }//GEN-LAST:event_jButtonOcistiFilterActionPerformed
+
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDetalji;
     private javax.swing.JButton jButtonFiltriraj;
     private javax.swing.JButton jButtonObrisi;
+    private javax.swing.JButton jButtonOcistiFilter;
     private javax.swing.JComboBox<Predstava> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

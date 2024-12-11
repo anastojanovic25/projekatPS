@@ -458,5 +458,23 @@ public class DBBroker {
         
         return lista;
     }
+
+    public List<String> vratiEmailove() {
+        List<String> lista=new ArrayList<>();
+        String upit="SELECT EMAIL FROM KORISNICI";
+        try {
+            Statement s=DBConnection.getInstance().getConnection().createStatement();
+            ResultSet rs=s.executeQuery(upit);
+            while(rs.next()){
+                String email=rs.getString("EMAIL");
+                lista.add(email);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return lista;
+    }
     
 }

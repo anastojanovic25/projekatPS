@@ -163,4 +163,8 @@ public class Controller {
         }
         return password.toString();
     }
+
+    public List<String> vratiEmailove() {
+        return dbb.vratiEmailove();
+    }
 }
