@@ -7,8 +7,10 @@ package forms;
 import controller.Controller;
 import java.util.List;
 import model.Glumac;
+import model.Glumi;
 import model.Repertoar;
 import tableModel.TableModelGlumci;
+import tableModel.TableModelGlumi;
 
 /**
  *
@@ -23,9 +25,10 @@ public class RepertoarDetails extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         jLabelPredstavaNaziv.setText(r.getPredstava().getNaziv());
-        List<Glumac> glumci=Controller.getInstance().vratiListuGlumacaUPredstavi(r.getPredstava());
-        TableModelGlumci tmg=new TableModelGlumci(glumci);
+        List<Glumi> lista=Controller.getInstance().vratiListuGlumi(r.getPredstava());
+        TableModelGlumi tmg=new TableModelGlumi(lista);
         jTable1.setModel(tmg);
+        
     }
 
     /**
@@ -69,15 +72,16 @@ public class RepertoarDetails extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel2)
-                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(80, 80, 80)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabelPredstavaNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(137, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

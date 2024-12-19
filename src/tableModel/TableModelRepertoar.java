@@ -8,6 +8,7 @@ import forms.*;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import model.Repertoar;
+import static model.Repertoar.formatDate;
 
 /**
  *
@@ -34,7 +35,7 @@ public class TableModelRepertoar extends AbstractTableModel {
         Repertoar r=lista.get(rowIndex);
         switch(columnIndex){
             case 0:
-                return r.getDatum();
+                return formatDate(r.getDatum());
             case 1:
                 return r.getVreme();
             case 2:

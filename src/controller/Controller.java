@@ -23,6 +23,10 @@ import javax.mail.MessagingException;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import model.Glumi;
+import model.Koreograf;
+import model.Kostimograf;
+import model.Scenograf;
 
 /**
  *
@@ -56,8 +60,8 @@ public class Controller {
         dbb.obrisiPredstavu(p);
     }
 
-    public void dodajPredstavu(String naziv, int trajanje, Zanr zanr, Reziser reziser, List<Glumac> selektovaniGlumci, Korisnik korisnik) {
-        dbb.dodajPredstavu(naziv, trajanje, zanr, reziser, selektovaniGlumci, korisnik);
+    public void dodajPredstavu(String naziv, int trajanje, Zanr zanr, Reziser reziser, List<Glumac> selektovaniGlumci, Korisnik korisnik, Scenograf scenograf, Koreograf kor, Kostimograf kom) {
+        dbb.dodajPredstavu(naziv, trajanje, zanr, reziser, selektovaniGlumci, korisnik,scenograf,kor,kom);
     }
 
     public void azurirajPredstavu(long id, String naziv, int trajanje, String datumStr, Zanr zanr, Date datum, Korisnik korisnik) {
@@ -166,5 +170,25 @@ public class Controller {
 
     public List<String> vratiEmailove() {
         return dbb.vratiEmailove();
+    }
+
+    public List<Glumi> vratiListuGlumi(Predstava p) {
+        return dbb.vratiListuGlumi(p);
+    }
+
+    public List<Scenograf> vratiListuScenografa() {
+        return dbb.vratiListuScenografa();
+    }
+
+    public List<Kostimograf> vratiListuKostimografa() {
+        return dbb.vratiListuKostimografa();
+    }
+
+    public List<Koreograf> vratiListuKoreografa() {
+        return dbb.vratiListuKoreografa();
+    }
+
+    public void dodajPredstavu2(String naziv, int trajanje, Zanr zanr, Reziser reziser, Scenograf scenograf1, Koreograf koreograf1, Kostimograf kostimograf1, List<Glumac> glumci, List<String> uloge, Korisnik korisnik) {
+        dbb.dodajPredstavu2(naziv,  trajanje,zanr, reziser, scenograf1,  koreograf1,  kostimograf1,  glumci,  uloge,  korisnik);
     }
 }

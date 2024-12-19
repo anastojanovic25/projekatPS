@@ -4,6 +4,7 @@
  */
 package connection;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import model.Korisnik;
@@ -18,9 +19,14 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Glumac;
+import model.Glumi;
+import model.Koreograf;
+import model.Kostimograf;
 import model.Predstava;
 import model.Repertoar;
 import model.Reziser;
+import model.Scenograf;
+import model.Uloga;
 import model.Zanr;
 
 /**
@@ -78,12 +84,15 @@ public class DBBroker {
         List<Predstava> lista=new ArrayList<>();
           try {
            
-            String upit="SELECT P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,R.IME AS RI,R.PREZIME AS RPR FROM Predstava p JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER R ON P.REZISER=R.ID";
+            String upit="SELECT P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,R.IME AS RI,R.PREZIME AS RPR,S.IME AS SI, S.PREZIME AS SP, KR.IME AS KRI, KR.PREZIME AS KRP, KO.IME AS KOI, KO.PREZIME AS KOP FROM Predstava p JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER R ON P.REZISER=R.ID JOIN SCENOGRAF S ON P.SCENOGRAF=S.JMBG JOIN KOREOGRAF KR ON P.KOREOGRAF=KR.JMBG JOIN KOSTIMOGRAF KO ON P.KOSTIMOGRAF=KO.JMBG";
             Statement s=DBConnection.getInstance().getConnection().createStatement();
             ResultSet rs=s.executeQuery(upit);
             while(rs.next()){
                 long idPr=rs.getLong("id");
                 long idR=rs.getLong("reziser");
+                long jmbgS=rs.getLong("scenograf");
+                long jmbgKor=rs.getLong("koreograf");
+                long jmbgKos=rs.getLong("kostimograf");
                 String naziv=rs.getString("naziv");
                 int tr=rs.getInt("trajanje");
                 long id=rs.getLong("idKorisnika");
@@ -95,15 +104,22 @@ public class DBBroker {
                 String gender=rs.getString("GENDER");
                 String ri=rs.getString("RI");
                 String rpr=rs.getString("RPR");
+                String si=rs.getString("SI");
+                String sp=rs.getString("SP");
+                String koi=rs.getString("KOI");
+                String kop=rs.getString("KOP");
+                String koreografime=rs.getString("KRI");
+                String krp=rs.getString("KRP");
                 Zanr zanr=Zanr.valueOf(rs.getString("zanr"));
                 
                 Korisnik k=new Korisnik(id, email, pass, ime, prezime, num, gender);
                 
                Reziser reziser=new Reziser(idR, ri, rpr);
-               Predstava pr=new Predstava(idPr, naziv, reziser, tr, zanr, k);
+               Scenograf scenograf=new Scenograf(jmbgS, si, sp);
+               Koreograf koreograf=new Koreograf(jmbgKor, koreografime, krp);
+               Kostimograf kosimograf=new Kostimograf(jmbgKos, koi, kop);
+               Predstava pr=new Predstava(idPr, naziv, reziser, scenograf, koreograf, kosimograf, tr, zanr, k);
                lista.add(pr);
-
-                
             }
             
            
@@ -133,8 +149,8 @@ public class DBBroker {
     }
 
     
-    public void dodajPredstavu(String naziv, int trajanje, Zanr zanr, Reziser reziser, List<Glumac> selektovaniGlumci, Korisnik korisnik) {
-         String upit="INSERT INTO PREDSTAVA(NAZIV,REZISER, TRAJANJE,ZANR, IDKORISNIKA) VALUES (?,?,?,?,?)";
+    public void dodajPredstavu(String naziv, int trajanje, Zanr zanr, Reziser reziser, List<Glumac> selektovaniGlumci, Korisnik korisnik, Scenograf scenograf, Koreograf kor, Kostimograf kom) {
+         String upit="INSERT INTO PREDSTAVA(NAZIV,REZISER, TRAJANJE,ZANR, IDKORISNIKA,SCENOGRAF, KOSTIMOGRAF, KOREOGRAF) VALUES (?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps=DBConnection.getInstance().getConnection().prepareStatement(upit,Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, naziv);
@@ -144,7 +160,9 @@ public class DBBroker {
             ps.setString(4, zanr+"");
          
             ps.setLong(5,korisnik.getId());
-            
+            ps.setLong(6, scenograf.getJmbg());
+            ps.setLong(7, kom.getJmbg());
+            ps.setLong(8, kor.getJmbg());
             ps.executeUpdate();
             ResultSet generatedKeys=ps.getGeneratedKeys();
             if(generatedKeys.next()){
@@ -198,11 +216,7 @@ public class DBBroker {
                 String prezime=rs.getString("prezime");
                Reziser r=new Reziser(id, ime, prezime);
                lista.add(r);
-
-                
             }
-            
-           
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -223,11 +237,7 @@ public class DBBroker {
                 String prezime=rs.getString("prezime");
                Glumac g=new Glumac(jmbg, ime, prezime);
                lista.add(g);
-
-                
             }
-            
-           
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -239,7 +249,7 @@ public class DBBroker {
     public List<Repertoar> vratiListuRepertoara() {
         List<Repertoar> lista=new ArrayList<>();
          try {
-          String upit="SELECT R.*,P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,RE.IME AS RI,RE.PREZIME AS RPR FROM REPERTOAR R JOIN PREDSTAVA P ON R.IDPREDSTAVE=P.ID JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER RE ON P.REZISER=RE.ID ORDER BY DATUM ASC,VREME ASC";
+          String upit="SELECT R.*,P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,RE.IME AS RI,RE.PREZIME AS RPR,S.IME AS SI, S.PREZIME AS SP, KR.IME AS KRI, KR.PREZIME AS KRP, KO.IME AS KOI, KO.PREZIME AS KOP FROM REPERTOAR R JOIN PREDSTAVA P ON R.IDPREDSTAVE=P.ID JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER RE ON P.REZISER=RE.ID JOIN SCENOGRAF S ON P.SCENOGRAF=S.JMBG JOIN KOREOGRAF KR ON P.KOREOGRAF=KR.JMBG JOIN KOSTIMOGRAF KO ON P.KOSTIMOGRAF=KO.JMBG ORDER BY DATUM ASC,VREME ASC";
           Statement s=DBConnection.getInstance().getConnection().createStatement();
           ResultSet rs=s.executeQuery(upit);
             while(rs.next()){
@@ -257,11 +267,26 @@ public class DBBroker {
                 String ri=rs.getString("RI");
                 String rpr=rs.getString("RPR");
                 Zanr zanr=Zanr.valueOf(rs.getString("zanr"));
+               
+                String si=rs.getString("SI");
+                String sp=rs.getString("SP");
+                String koi=rs.getString("KOI");
+                String kop=rs.getString("KOP");
+                String koreografime=rs.getString("KRI");
+                String krp=rs.getString("KRP");
+                long jmbgS=rs.getLong("scenograf");
+                long jmbgKor=rs.getLong("koreograf");
+                long jmbgKos=rs.getLong("kostimograf");
+                
                 
                 Korisnik k=new Korisnik(id, email, pass, ime, prezime, num, gender);
                 
                Reziser reziser=new Reziser(idR, ri, rpr);
-               Predstava pr=new Predstava(idPr, naziv, reziser, tr, zanr, k);
+               Scenograf scenograf=new Scenograf(jmbgS, si, sp);
+               Koreograf koreograf=new Koreograf(jmbgKor, koreografime, krp);
+               Kostimograf kosimograf=new Kostimograf(jmbgKos, koi, kop);
+               Predstava pr=new Predstava(idPr, naziv, reziser, scenograf, koreograf, kosimograf, tr, zanr, k);
+               
               
                String sala=rs.getString("sala");
                java.sql.Date datumSql=rs.getDate("datum");
@@ -356,7 +381,7 @@ public class DBBroker {
         try {
               java.util.Date utilDate = formatter.parse(datum);
          java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-         String upit="SELECT R.*, P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,RE.IME AS RI,RE.PREZIME AS RPR FROM REPERTOAR R JOIN PREDSTAVA P ON R.IDPREDSTAVE=P.ID JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER RE ON P.REZISER=RE.ID WHERE DATUM=?";
+         String upit="SELECT P.*,K.EMAIL, K.PASSWORD, K.IME,K.PREZIME,K.NUMBER, K.GENDER,R.IME AS RI,R.PREZIME AS RPR,S.IME AS SI, S.PREZIME AS SP, KR.IME AS KRI, KR.PREZIME AS KRP, KO.IME AS KOI, KO.PREZIME AS KOP FROM Predstava p JOIN korisniCI k ON P.IDKORISNIKA=K.ID JOIN REZISER R ON P.REZISER=R.ID JOIN SCENOGRAF S ON P.SCENOGRAF=S.JMBG JOIN KOREOGRAF KR ON P.KOREOGRAF=KR.JMBG JOIN KOSTIMOGRAF KO ON P.KOSTIMOGRAF=KO.JMBG WHERE DATUM=?";
        
             PreparedStatement s=DBConnection.getInstance().getConnection().prepareStatement(upit);
             s.setDate(1, sqlDate);
@@ -380,20 +405,31 @@ public class DBBroker {
                 String rpr=rs.getString("RPR");
                 Zanr zanr=Zanr.valueOf(rs.getString("zanr"));
                 
+                String si=rs.getString("SI");
+                String sp=rs.getString("SP");
+                String koi=rs.getString("KOI");
+                String kop=rs.getString("KOP");
+                String koreografime=rs.getString("KRI");
+                String krp=rs.getString("KRP");
+                long jmbgS=rs.getLong("scenograf");
+                long jmbgKor=rs.getLong("koreograf");
+                long jmbgKos=rs.getLong("kostimograf");
+                
                 Korisnik k=new Korisnik(id, email, pass, ime, prezime, num, gender);
                 
-                Reziser reziser=new Reziser(idR, ri, rpr);
-                Predstava pr=new Predstava(idPr, naziv, reziser, tr, zanr, k);
+               Reziser reziser=new Reziser(idR, ri, rpr);
+               Scenograf scenograf=new Scenograf(jmbgS, si, sp);
+               Koreograf koreograf=new Koreograf(jmbgKor, koreografime, krp);
+               Kostimograf kosimograf=new Kostimograf(jmbgKos, koi, kop);
+               Predstava pr=new Predstava(idPr, naziv, reziser, scenograf, koreograf, kosimograf, tr, zanr, k);
+               
                 Repertoar rep=new Repertoar(pr, utilDate, vreme, sala);
                 lista.add(rep);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-          
-             
-        
+       
         return lista;
     }
 
@@ -427,9 +463,6 @@ public class DBBroker {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-          
-             
-        
         return lista;
     }
 
@@ -445,12 +478,9 @@ public class DBBroker {
                 String ime=rs.getString("ime");
                 String prezime=rs.getString("prezime");
                Glumac g=new Glumac(jmbg, ime, prezime);
-               lista.add(g);
-
-                
+               lista.add(g); 
             }
             
-           
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -476,5 +506,202 @@ public class DBBroker {
         
         return lista;
     }
-    
+
+    public List<Glumi> vratiListuGlumi(Predstava predstava) {
+          List<Glumi> lista=new ArrayList<>();
+         try {
+            String upit="SELECT * FROM ULOGA U JOIN GLUMI G ON G.ULOGA=U.ID JOIN GLUMCI GL ON GL.JMBG=G.JMBG WHERE U.IDPREDSTAVE="+predstava.getId();
+            Statement s=DBConnection.getInstance().getConnection().createStatement();
+            ResultSet rs=s.executeQuery(upit);
+            while(rs.next()){
+                long jmbg=rs.getLong("jmbg");
+                String ime=rs.getString("ime");
+                String prezime=rs.getString("prezime");
+                long idUloge=rs.getLong("id");
+                String nazivUloge=rs.getString("naziv");
+                Uloga u=new Uloga(idUloge, nazivUloge, predstava);
+               Glumac g=new Glumac(jmbg, ime, prezime);
+               Long id=rs.getLong("idGlumi");
+               Glumi gl =new Glumi(g, u,id);
+               lista.add(gl);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return lista;
+    }
+
+    public List<Scenograf> vratiListuScenografa() {
+         List<Scenograf> lista=new ArrayList();
+          try {
+            String upit="SELECT * FROM Scenograf";
+            Statement s=DBConnection.getInstance().getConnection().createStatement();
+            ResultSet rs=s.executeQuery(upit);
+            while(rs.next()){
+                long jmbg=rs.getLong("jmbg");
+                String ime=rs.getString("ime");
+                String prezime=rs.getString("prezime");
+               Scenograf r=new Scenograf(jmbg, ime, prezime);
+               lista.add(r); 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
+
+    public List<Kostimograf> vratiListuKostimografa() {
+         List<Kostimograf> lista=new ArrayList();
+          try {
+            String upit="SELECT * FROM Kostimograf";
+            Statement s=DBConnection.getInstance().getConnection().createStatement();
+            ResultSet rs=s.executeQuery(upit);
+            while(rs.next()){
+                long jmbg=rs.getLong("jmbg");
+                String ime=rs.getString("ime");
+                String prezime=rs.getString("prezime");
+               Kostimograf r=new Kostimograf(jmbg, ime, prezime);
+               lista.add(r);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
+
+    public List<Koreograf> vratiListuKoreografa() {
+        List<Koreograf> lista=new ArrayList();
+          try {
+           
+            String upit="SELECT * FROM Koreograf";
+            Statement s=DBConnection.getInstance().getConnection().createStatement();
+            ResultSet rs=s.executeQuery(upit);
+            while(rs.next()){
+                long jmbg=rs.getLong("jmbg");
+                String ime=rs.getString("ime");
+                String prezime=rs.getString("prezime");
+               Koreograf k=new Koreograf(jmbg, ime, prezime);
+               lista.add(k);  
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
+
+    public void dodajPredstavu2(String naziv, int trajanje, Zanr zanr, Reziser reziser, Scenograf scenograf1, Koreograf koreograf1, Kostimograf kostimograf1, List<Glumac> glumci, List<String> uloge, Korisnik korisnik) {
+        String upitPredstava = "INSERT INTO PREDSTAVA(NAZIV,REZISER,TRAJANJE,ZANR,IDKORISNIKA,SCENOGRAF,KOSTIMOGRAF,KOREOGRAF) VALUES (?,?,?,?,?,?,?,?)";
+        String upitUloga = "INSERT INTO ULOGA(NAZIV,IDPREDSTAVE) VALUES(?,?)";
+        String upitGlumi = "INSERT INTO GLUMI(JMBG,ULOGA) VALUES(?,?)";
+
+        try {
+             Connection connection = DBConnection.getInstance().getConnection();
+            connection.setAutoCommit(false); // Početak transakcije
+
+    // Dodavanje predstave
+     PreparedStatement psPredstava = connection.prepareStatement(upitPredstava, Statement.RETURN_GENERATED_KEYS);
+    psPredstava.setString(1, naziv);
+    psPredstava.setLong(2, reziser.getId());
+    psPredstava.setInt(3, trajanje);
+    psPredstava.setString(4, zanr + "");
+    psPredstava.setLong(5, korisnik.getId());
+    psPredstava.setLong(6, scenograf1.getJmbg());
+    psPredstava.setLong(7, kostimograf1.getJmbg());
+    psPredstava.setLong(8, koreograf1.getJmbg());
+    psPredstava.executeUpdate();
+
+    ResultSet generatedKeysPredstava = psPredstava.getGeneratedKeys();
+    if (!generatedKeysPredstava.next()) {
+        throw new SQLException("Dodavanje predstave nije generisalo ID.");
+    }
+    long idPredstava = generatedKeysPredstava.getLong(1);
+
+    // Dodavanje uloga i povezivanje sa glumcima
+    PreparedStatement psUloga = connection.prepareStatement(upitUloga, Statement.RETURN_GENERATED_KEYS);
+    PreparedStatement psGlumi = connection.prepareStatement(upitGlumi);
+
+    for (int i = 0; i < uloge.size(); i++) {
+        // Dodavanje uloge
+        psUloga.setString(1, uloge.get(i));
+        psUloga.setLong(2, idPredstava);
+        psUloga.executeUpdate();
+
+        ResultSet generatedKeysUloga = psUloga.getGeneratedKeys();
+        if (!generatedKeysUloga.next()) {
+            throw new SQLException("Dodavanje uloge nije generisalo ID.");
+        }
+        long idUloga = generatedKeysUloga.getLong(1);
+
+        // Dodavanje glumca za odgovarajuću ulogu
+        Glumac glumac = glumci.get(i); // Glumac odgovara ulogama po indeksu
+        psGlumi.setLong(1, glumac.getJmbg());
+        psGlumi.setLong(2, idUloga);
+        psGlumi.executeUpdate();
+    }
+
+            connection.commit(); // Završi transakciju
+            System.out.println("Podaci uspešno sačuvani.");
+        } catch (SQLException ex) {
+            try {
+                DBConnection.getInstance().getConnection().rollback(); // Vraćanje transakcije
+                System.err.println("Greška u bazi, transakcija vraćena: " + ex.getMessage());
+            } catch (SQLException rollbackEx) {
+                System.err.println("Greška pri vraćanju transakcije: " + rollbackEx.getMessage());
+            }
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                DBConnection.getInstance().getConnection().setAutoCommit(true); // Vraćanje u automatski mod
+            } catch (SQLException ex) {
+                System.err.println("Greška pri vraćanju automatskog commit-a: " + ex.getMessage());
+            }
+        }
+    }
+
+
+
+//        String upit="INSERT INTO PREDSTAVA(NAZIV,REZISER, TRAJANJE,ZANR, IDKORISNIKA,SCENOGRAF, KOSTIMOGRAF, KOREOGRAF) VALUES (?,?,?,?,?,?,?,?)";
+//        try {
+//            PreparedStatement ps=DBConnection.getInstance().getConnection().prepareStatement(upit,Statement.RETURN_GENERATED_KEYS);
+//            ps.setString(1, naziv);
+//            ps.setLong(2, reziser.getId());
+//            ps.setInt(3, trajanje);
+//            
+//            ps.setString(4, zanr+"");
+//         
+//            ps.setLong(5,korisnik.getId());
+//            ps.setLong(6, scenograf1.getJmbg());
+//            ps.setLong(7, kostimograf1.getJmbg());
+//            ps.setLong(8, koreograf1.getJmbg());
+//            ps.executeUpdate();
+//            ResultSet generatedKeys=ps.getGeneratedKeys();
+//            if(generatedKeys.next()){
+//                long idPredstava=generatedKeys.getLong(1);
+//                System.out.println(idPredstava);
+//                for (String string : uloge) {
+//                    String upit3="INSERT INTO ULOGA(NAZIV,IDPREDSTAVE) VALUES(?,?)";
+//                    PreparedStatement ps3=DBConnection.getInstance().getConnection().prepareStatement(upit3,Statement.RETURN_GENERATED_KEYS);
+//                    ps3.setString(1, string);
+//                    ps3.setLong(2, idPredstava);
+//                    ps3.executeUpdate();
+//                    ResultSet generatedKeys3=ps3.getGeneratedKeys(); 
+//                    while(generatedKeys3.next()){
+//                            long idUloge=generatedKeys3.getLong(1);
+//                            System.out.println(idUloge);
+//                            for (Glumac glumac : glumci) {
+//                                String upit2="INSERT INTO GLUMI(JMBG,ULOGA) VALUES(?,?)";
+//                                PreparedStatement ps2=DBConnection.getInstance().getConnection().prepareStatement(upit2);
+//                                ps2.setLong(1, glumac.getJmbg());
+//                                ps2.setLong(2, idUloge);
+//                                ps2.executeUpdate();
+//                        }
+//                            generatedKeys3.next();
+//                    }
+//                    }
+//                }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 }

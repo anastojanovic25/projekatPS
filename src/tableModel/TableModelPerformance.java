@@ -15,7 +15,7 @@ import model.Predstava;
  */
 public class TableModelPerformance extends AbstractTableModel{
      List<Predstava> lista;
-    String[] kolone={"Naziv","Reziser","Duzina trajanja(minuti)","Zanr","Korisnik"};
+    String[] kolone={"Naziv","Duzina trajanja(minuti)","Zanr","Korisnik"};
     public TableModelPerformance(List<Predstava> lista){
         this.lista=lista;
     } 
@@ -36,12 +36,10 @@ public class TableModelPerformance extends AbstractTableModel{
             case 0:
                 return p.getNaziv();
             case 1:
-                return p.getReziser().getIme()+" "+p.getReziser().getPrezime();
-            case 2:
                 return p.getTrajanje();
-            case 3:
+            case 2:
                 return p.getZanr();
-            case 4:
+            case 3:
                 return p.getKorisnikUnos().getIme();
             default:
                 return "N/A";

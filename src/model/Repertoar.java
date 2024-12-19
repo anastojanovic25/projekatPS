@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -60,5 +61,8 @@ public class Repertoar {
     public void setVreme(String vreme) {
         this.vreme = vreme;
     }
-    
+    public static String formatDate(Date datum) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        return sdf.format(datum);
+    }
 }

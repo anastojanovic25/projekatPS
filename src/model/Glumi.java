@@ -9,23 +9,17 @@ package model;
  * @author Ana
  */
 public class Glumi {
-    private Predstava p;
     private Glumac g;
+    private Uloga uloga; 
+    private long id;
 
     public Glumi() {
     }
 
-    public Glumi(Predstava p, Glumac g) {
-        this.p = p;
+    public Glumi(Glumac g, Uloga uloga,long id) {
         this.g = g;
-    }
-
-    public Predstava getP() {
-        return p;
-    }
-
-    public void setP(Predstava p) {
-        this.p = p;
+        this.uloga = uloga;
+        this.id=id;
     }
 
     public Glumac getG() {
@@ -35,6 +29,24 @@ public class Glumi {
     public void setG(Glumac g) {
         this.g = g;
     }
-    
+
+    public Uloga getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(Uloga uloga) {
+        this.uloga = uloga;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+
     
 }

@@ -47,27 +47,27 @@ public class MainForm extends javax.swing.JFrame {
         korisnik=k;
         
         //za datum u tabeli
-        jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = new JLabel();
-                if (value instanceof Date) {
-                    label.setText(formatter.format(value));
-                }
-                label.setOpaque(true);
-                
-                if (isSelected) {
-                    label.setBackground(table.getSelectionBackground());
-                    label.setForeground(table.getSelectionForeground());
-                } else {
-                    label.setBackground(table.getBackground());
-                    label.setForeground(table.getForeground());
-                }
-                return label;
-            }
-        });
+//        jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+//            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+//
+//            @Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                JLabel label = new JLabel();
+//                if (value instanceof Date) {
+//                    label.setText(formatter.format(value));
+//                }
+//                label.setOpaque(true);
+//                
+//                if (isSelected) {
+//                    label.setBackground(table.getSelectionBackground());
+//                    label.setForeground(table.getSelectionForeground());
+//                } else {
+//                    label.setBackground(table.getBackground());
+//                    label.setForeground(table.getForeground());
+//                }
+//                return label;
+//            }
+//        });
         
         
     }
@@ -409,27 +409,7 @@ public class MainForm extends javax.swing.JFrame {
        List<Repertoar> lista2=Controller.getInstance().vratiListuRepertoara();
          TableModelRepertoar tmr=new TableModelRepertoar(lista2);
         jTableRepertoar.setModel(tmr);
-            jTableRepertoar.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = new JLabel();
-                if (value instanceof Date) {
-                    label.setText(formatter.format(value));
-                }
-                label.setOpaque(true);
-                if (isSelected) {
-                    label.setBackground(table.getSelectionBackground());
-                    label.setForeground(table.getSelectionForeground());
-                } else {
-                    label.setBackground(table.getBackground());
-                    label.setForeground(table.getForeground());
-                }
-                return label;
-            }
-        });
-        
+           
 
     }
     public void popuniComboBox(){
