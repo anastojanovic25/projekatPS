@@ -48,6 +48,7 @@ public class LogIn extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 255));
         jLabel1.setText("Prijava za registrovane korisnike");
 
+        jTxtEmail.setText("ana.s@gmail.com");
         jTxtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTxtEmailActionPerformed(evt);
@@ -79,6 +80,8 @@ public class LogIn extends javax.swing.JFrame {
                 jLabelRegMouseClicked(evt);
             }
         });
+
+        jTxtPassword.setText("ana");
 
         jButton1.setText("Prikazi lozinku");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

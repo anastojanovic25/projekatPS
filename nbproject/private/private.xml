@@ -12,11 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/forms/ShowPerformances.java</file>
-            <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/forms/PerformanceDetails.java</file>
+            <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/forms/AddPerformance.java</file>
             <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/forms/MainForm.java</file>
-            <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/tableModel/TableModelGlumi.java</file>
             <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/controller/Controller.java</file>
+            <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/forms/LogIn.java</file>
             <file>file:/C:/Users/Ana/Documents/NetBeansProjects/projekatAnaStojanovic/src/connection/DBBroker.java</file>
         </group>
     </open-files>
