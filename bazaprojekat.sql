@@ -40,21 +40,53 @@ DROP TABLE IF EXISTS `glumi`;
 
 CREATE TABLE `glumi` (
   `jmbg` bigint(20) NOT NULL,
-  `idPredstave` bigint(20) NOT NULL,
-  PRIMARY KEY (`jmbg`,`idPredstave`),
-  KEY `idPredstave` (`idPredstave`),
+  `uloga` bigint(20) NOT NULL,
+  `idGlumi` bigint(20) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`jmbg`,`uloga`,`idGlumi`),
+  KEY `uloga` (`uloga`),
+  KEY `id` (`idGlumi`),
   CONSTRAINT `glumi_ibfk_1` FOREIGN KEY (`jmbg`) REFERENCES `glumci` (`jmbg`),
-  CONSTRAINT `glumi_ibfk_2` FOREIGN KEY (`idPredstave`) REFERENCES `predstava` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `glumi_ibfk_3` FOREIGN KEY (`uloga`) REFERENCES `uloga` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `glumi` */
 
-insert  into `glumi`(`jmbg`,`idPredstave`) values 
-(25558555,1),
-(545526666,2),
-(545526666,3),
-(2501552155,2),
-(2501552155,3);
+insert  into `glumi`(`jmbg`,`uloga`,`idGlumi`) values 
+(25558555,1,1),
+(25558555,7,4),
+(25558555,8,5),
+(25558555,9,6),
+(25558555,28,32),
+(25558555,29,33),
+(25558555,32,36),
+(545526666,23,27),
+(545526666,25,29),
+(545526666,26,30),
+(545526666,35,39),
+(545526666,37,41),
+(2501552155,24,28),
+(2501552155,27,31),
+(2501552155,30,34),
+(2501552155,31,35),
+(2501552155,33,37),
+(2501552155,34,38),
+(2501552155,36,40);
+
+/*Table structure for table `koreograf` */
+
+DROP TABLE IF EXISTS `koreograf`;
+
+CREATE TABLE `koreograf` (
+  `jmbg` bigint(20) NOT NULL,
+  `ime` varchar(50) DEFAULT NULL,
+  `prezime` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`jmbg`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `koreograf` */
+
+insert  into `koreograf`(`jmbg`,`ime`,`prezime`) values 
+(250105522,'andrija','andic');
 
 /*Table structure for table `korisnici` */
 
@@ -69,7 +101,7 @@ CREATE TABLE `korisnici` (
   `number` varchar(50) DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `korisnici` */
 
@@ -79,7 +111,25 @@ insert  into `korisnici`(`id`,`email`,`password`,`ime`,`prezime`,`number`,`gende
 (3,'milica.p@gmail.com','milicap','Milica','Petrovic','+381654754','Zenski'),
 (4,'petar@gmail.com','petar','Petar','Petrovic','+38165598745','Muski'),
 (5,'milos@gmail.com','milos','milos','milosevic','+38745925255','Muski'),
-(6,'sasa.s@gmail.com','sasas','Sasa','Stojanovic','0648167116','Muski');
+(6,'sasa.s@gmail.com','sasas','Sasa','Stojanovic','0648167116','Muski'),
+(8,'danijela.sale1000@gmail.com','danijela','Danijela','Stojanovic','0605505068','Zenski'),
+(9,'marko.ciric2002@gmail.com','marko2002','marko','ciric','+38165205220','Muski');
+
+/*Table structure for table `kostimograf` */
+
+DROP TABLE IF EXISTS `kostimograf`;
+
+CREATE TABLE `kostimograf` (
+  `jmbg` bigint(20) NOT NULL,
+  `ime` varchar(50) DEFAULT NULL,
+  `prezime` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`jmbg`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `kostimograf` */
+
+insert  into `kostimograf`(`jmbg`,`ime`,`prezime`) values 
+(751455555,'marko','markovic');
 
 /*Table structure for table `predstava` */
 
@@ -92,19 +142,42 @@ CREATE TABLE `predstava` (
   `trajanje` bigint(20) DEFAULT NULL,
   `zanr` varchar(50) DEFAULT NULL,
   `idKorisnika` bigint(20) DEFAULT NULL,
+  `scenograf` bigint(20) DEFAULT NULL,
+  `koreograf` bigint(20) DEFAULT NULL,
+  `kostimograf` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idKorisnika` (`idKorisnika`),
   KEY `reziser` (`reziser`),
+  KEY `scenograf` (`scenograf`),
+  KEY `koreograf` (`koreograf`),
+  KEY `kostimograf` (`kostimograf`),
   CONSTRAINT `predstava_ibfk_1` FOREIGN KEY (`idKorisnika`) REFERENCES `korisnici` (`id`),
-  CONSTRAINT `predstava_ibfk_2` FOREIGN KEY (`reziser`) REFERENCES `reziser` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `predstava_ibfk_2` FOREIGN KEY (`reziser`) REFERENCES `reziser` (`id`),
+  CONSTRAINT `predstava_ibfk_3` FOREIGN KEY (`scenograf`) REFERENCES `scenograf` (`jmbg`),
+  CONSTRAINT `predstava_ibfk_4` FOREIGN KEY (`koreograf`) REFERENCES `koreograf` (`jmbg`),
+  CONSTRAINT `predstava_ibfk_5` FOREIGN KEY (`kostimograf`) REFERENCES `kostimograf` (`jmbg`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `predstava` */
 
-insert  into `predstava`(`id`,`naziv`,`reziser`,`trajanje`,`zanr`,`idKorisnika`) values 
-(1,'Pr1',2,120,'KOMEDIJA',1),
-(2,'Ana Karenjina',2,100,'BALET',1),
-(3,'Ljudi u crnom',1,85,'AKCIJA',6);
+insert  into `predstava`(`id`,`naziv`,`reziser`,`trajanje`,`zanr`,`idKorisnika`,`scenograf`,`koreograf`,`kostimograf`) values 
+(1,'Pr1',2,120,'KOMEDIJA',1,40520007589,250105522,751455555),
+(2,'Ana Karenjina',2,100,'BALET',1,40520007589,250105522,751455555),
+(3,'Ljudi u crnom',1,85,'AKCIJA',6,40520007589,250105522,751455555),
+(4,'hahah',1,123,'KOMEDIJA',1,40520007589,250105522,751455555),
+(6,'Rat i mir',1,90,'HOROR',1,40520007589,250105522,751455555),
+(7,'Juzni vetar',2,120,'AKCIJA',1,40520007589,250105522,751455555),
+(10,'Juzni vetar2',1,122,'KOMEDIJA',1,40520007589,250105522,751455555),
+(12,'krcko orascic',2,200,'BALET',1,40520007589,250105522,751455555),
+(20,'Secer',2,100,'KOMEDIJA',1,40520007589,250105522,751455555),
+(21,'provera',1,100,'KOMEDIJA',1,40520007589,250105522,751455555),
+(22,'Alisa u zemlji cuda',2,100,'BALET',1,40520007589,250105522,751455555),
+(23,'haa',1,120,'KOMEDIJA',1,40520007589,250105522,751455555),
+(24,'ddd',2,123,'AKCIJA',1,40520007589,250105522,751455555),
+(25,'rr',1,11,'HOROR',1,40520007589,250105522,751455555),
+(26,'proba',2,121,'MJUZIKL',1,40520007589,250105522,751455555),
+(27,'proba1234',1,123,'KOMEDIJA',1,40520007589,250105522,751455555),
+(28,'probanova',1,1234,'KOMEDIJA',1,40520007589,250105522,751455555);
 
 /*Table structure for table `predstave` */
 
@@ -149,10 +222,9 @@ insert  into `repertoar`(`idPredstave`,`datum`,`sala`,`vreme`) values
 (2,'2024-12-29','2','16:00'),
 (2,'2024-12-30','5','14:25'),
 (3,'2024-12-30','10','10:00'),
-(3,'2025-11-12','1','11:11'),
-(3,'2025-11-20','5','17:00'),
-(3,'2025-12-20','5','14:00'),
-(3,'2025-12-20','6','17:30');
+(6,'2025-01-15','5','18:00'),
+(10,'2025-05-13','5','12:45'),
+(27,'2025-02-12','5','18:00');
 
 /*Table structure for table `reziser` */
 
@@ -170,6 +242,60 @@ CREATE TABLE `reziser` (
 insert  into `reziser`(`id`,`ime`,`prezime`) values 
 (1,'Marko','M'),
 (2,'Bojan','Bogd');
+
+/*Table structure for table `scenograf` */
+
+DROP TABLE IF EXISTS `scenograf`;
+
+CREATE TABLE `scenograf` (
+  `jmbg` bigint(20) NOT NULL,
+  `ime` varchar(50) DEFAULT NULL,
+  `prezime` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`jmbg`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `scenograf` */
+
+insert  into `scenograf`(`jmbg`,`ime`,`prezime`) values 
+(40520007589,'luka','lukic');
+
+/*Table structure for table `uloga` */
+
+DROP TABLE IF EXISTS `uloga`;
+
+CREATE TABLE `uloga` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `naziv` varchar(50) DEFAULT NULL,
+  `idPredstave` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idPredstave` (`idPredstave`),
+  CONSTRAINT `uloga_ibfk_1` FOREIGN KEY (`idPredstave`) REFERENCES `predstava` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `uloga` */
+
+insert  into `uloga`(`id`,`naziv`,`idPredstave`) values 
+(1,'ana',2),
+(2,'marica',2),
+(4,'maras',10),
+(7,'glumac1',12),
+(8,'glumac2',12),
+(9,'glumac3',12),
+(23,'Andrija',20),
+(24,'Zena',20),
+(25,'Mama',20),
+(26,'dete',21),
+(27,'alisa',22),
+(28,'zec',22),
+(29,'sesirdzija',22),
+(30,'mama',23),
+(31,'cerka',23),
+(32,'dd',24),
+(33,'sd',25),
+(34,'proba',26),
+(35,'proba',27),
+(36,'proba',28),
+(37,'nova',28);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
