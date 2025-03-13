@@ -134,6 +134,14 @@ public class ProcessingClientRequest extends Thread{
                          HashMap<String, List<Object>> lista4=(HashMap<String, List<Object>>) clientRequest.getParam();
                          serverResponse.setResponse(Controller.getInstance().dodajPredstavu2(lista4));
                          break;
+                     case dodajGlumca:
+                         Glumac g=(Glumac) clientRequest.getParam();
+                         serverResponse.setResponse(Controller.getInstance().dodajGlumca(g));
+                         break;
+                     case azurirajGlumca:
+                         HashMap<String, List<Object>> lista5=(HashMap<String, List<Object>>) clientRequest.getParam();
+                         serverResponse.setResponse(Controller.getInstance().azurirajGlumca(lista5));
+                         break;
                  }
                  
                  sendResponse(serverResponse);

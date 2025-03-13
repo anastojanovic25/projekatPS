@@ -4,6 +4,7 @@
  */
 package controller;
 
+import communication.ClientRequest;
 import connection.DBBroker;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -31,7 +32,10 @@ import model.Koreograf;
 import model.Kostimograf;
 import model.Scenograf;
 import model.Uloga;
+import operations.Operations;
+import soGlumac.AddGlumac;
 import soGlumac.GetGlumac;
+import soGlumac.UpdateGlumac;
 import soGlumi.AddGlumi;
 import soGlumi.GetGlumi;
 import soKoreograf.GetKoreograf;
@@ -86,6 +90,11 @@ public class Controller {
         AddKorisnik so=new AddKorisnik();
         so.templateExecute(k, null);
         return so.getId();
+    }
+      public int dodajGlumca(Glumac g) throws Exception {
+          AddGlumac so=new AddGlumac();
+          so.templateExecute(g, null);
+          return so.getId();
     }
     
     public List<Predstava> vratiListuPredstava() throws Exception {
@@ -210,6 +219,18 @@ public class Controller {
         so.templateExecute(stari, novi);
         return so.isUpdated();
     }
+    public boolean azurirajGlumca(HashMap<String, List<Object>> objekti) throws Exception {
+        String key=objekti.keySet().iterator().next();
+        List<Object> listaObjekata=objekti.get(key);
+        
+        Glumac stari= (Glumac) listaObjekata.get(0);
+        Glumac novi= (Glumac) listaObjekata.get(1);
+        
+        UpdateGlumac so=new UpdateGlumac();
+        so.templateExecute(stari, novi);
+        return so.isUpdated();
+    }
+
 
 //        public List<Reziser> vratiListuRezisera() {
 //        return dbb.vratiListuRezisera();

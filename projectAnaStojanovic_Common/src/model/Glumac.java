@@ -90,17 +90,17 @@ public class Glumac extends AbstractDomainObject{
 
     @Override
     public String uslov() {
-        return "";
+        return "JMBG="+jmbg;
     }
 
     @Override
     public String valuesForInsert() {
-        return "";
+        return jmbg+", '"+ime+"', '"+prezime+"'";
     }
 
     @Override
     public String valuesForUpdate(Object o) {
-        return "";
+        return "ime='"+ime+"', prezime='"+prezime+"'" ;
     }
 
     @Override

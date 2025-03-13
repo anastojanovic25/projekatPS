@@ -78,14 +78,14 @@ DROP TABLE IF EXISTS `koreograf`;
 
 CREATE TABLE `koreograf` (
   `jmbg` bigint(20) NOT NULL,
-  `ime` varchar(50) DEFAULT NULL,
-  `prezime` varchar(50) DEFAULT NULL,
+  `imeKor` varchar(50) DEFAULT NULL,
+  `prezimeKor` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`jmbg`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `koreograf` */
 
-insert  into `koreograf`(`jmbg`,`ime`,`prezime`) values 
+insert  into `koreograf`(`jmbg`,`imeKor`,`prezimeKor`) values 
 (250105522,'andrija','andic');
 
 /*Table structure for table `korisnici` */
@@ -121,14 +121,14 @@ DROP TABLE IF EXISTS `kostimograf`;
 
 CREATE TABLE `kostimograf` (
   `jmbg` bigint(20) NOT NULL,
-  `ime` varchar(50) DEFAULT NULL,
-  `prezime` varchar(50) DEFAULT NULL,
+  `imeKos` varchar(50) DEFAULT NULL,
+  `prezimeKos` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`jmbg`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `kostimograf` */
 
-insert  into `kostimograf`(`jmbg`,`ime`,`prezime`) values 
+insert  into `kostimograf`(`jmbg`,`imeKos`,`prezimeKos`) values 
 (751455555,'marko','markovic');
 
 /*Table structure for table `predstava` */
@@ -232,14 +232,14 @@ DROP TABLE IF EXISTS `reziser`;
 
 CREATE TABLE `reziser` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ime` varchar(30) DEFAULT NULL,
-  `prezime` varchar(30) DEFAULT NULL,
+  `imeR` varchar(30) DEFAULT NULL,
+  `prezimeR` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reziser` */
 
-insert  into `reziser`(`id`,`ime`,`prezime`) values 
+insert  into `reziser`(`id`,`imeR`,`prezimeR`) values 
 (1,'Marko','M'),
 (2,'Bojan','Bogd');
 
@@ -249,14 +249,14 @@ DROP TABLE IF EXISTS `scenograf`;
 
 CREATE TABLE `scenograf` (
   `jmbg` bigint(20) NOT NULL,
-  `ime` varchar(50) DEFAULT NULL,
-  `prezime` varchar(50) DEFAULT NULL,
+  `imeS` varchar(50) DEFAULT NULL,
+  `prezimeS` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`jmbg`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `scenograf` */
 
-insert  into `scenograf`(`jmbg`,`ime`,`prezime`) values 
+insert  into `scenograf`(`jmbg`,`imeS`,`prezimeS`) values 
 (40520007589,'luka','lukic');
 
 /*Table structure for table `uloga` */

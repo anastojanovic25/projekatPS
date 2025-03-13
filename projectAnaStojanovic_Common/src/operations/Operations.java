@@ -32,4 +32,6 @@ public enum Operations {
     vratiListuKoreografa,
     dodajPredstavu2,
     azurirajRepertoar2,
+    dodajGlumca,
+    azurirajGlumca,
 }
