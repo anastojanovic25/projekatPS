@@ -244,6 +244,12 @@ public class Controller {
         return (boolean) Communication.getInstance().getResponse1().getResponse();
     }
 
+    public void prijaviKorisnikaNaServer(Korisnik korisnik) {
+         ClientRequest clientRequest = new ClientRequest(Operations.ulogujKorisnika, korisnik);
+         Communication.getInstance().sendRequest(clientRequest);
+         Communication.getInstance().getResponse1();
+    }
+
   
 
    

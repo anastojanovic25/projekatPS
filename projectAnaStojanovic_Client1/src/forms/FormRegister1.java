@@ -6,6 +6,8 @@ package forms;
 
 import controller.Controller;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -33,6 +35,7 @@ public class FormRegister1 extends javax.swing.JDialog {
     public FormRegister1(FormRegister0 parent, boolean modal, String email,Locale currentLocale) {
         super(parent, modal);
         initComponents();
+        addListeners1();
         this.currentLocale = currentLocale;
         
         loadLanguage();
@@ -65,12 +68,13 @@ public class FormRegister1 extends javax.swing.JDialog {
         jLabelPassword = new javax.swing.JLabel();
         jCheckBoxCond = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
-        jButtonPrikaziLozinku2 = new javax.swing.JButton();
-        jButtonPrikaziLozinku1 = new javax.swing.JButton();
         jLabelEmail = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 2, 14)); // NOI18N
         jLabel1.setText("Registracija");
 
         jButton1.setText("Zavrsi registraciju");
@@ -96,19 +100,9 @@ public class FormRegister1 extends javax.swing.JDialog {
 
         jLabel5.setText("Ponovite lozinku:");
 
-        jButtonPrikaziLozinku2.setText("Prikazi lozinku");
-        jButtonPrikaziLozinku2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPrikaziLozinku2ActionPerformed(evt);
-            }
-        });
+        jCheckBox1.setText("Prikazi lozinku");
 
-        jButtonPrikaziLozinku1.setText("Prikazi lozinku");
-        jButtonPrikaziLozinku1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPrikaziLozinku1ActionPerformed(evt);
-            }
-        });
+        jCheckBox2.setText("Prikazi lozinku");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,21 +128,23 @@ public class FormRegister1 extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(153, 153, 153)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTxtRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBoxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addGap(125, 125, 125)
-                                    .addComponent(jLabelEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jCheckBoxCond, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jTxtRegPassword1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTxtRegPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(40, 40, 40)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButtonPrikaziLozinku1)
-                                        .addComponent(jButtonPrikaziLozinku2))))
-                            .addComponent(jTxtRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(55, 55, 55)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jCheckBox2)
+                                        .addComponent(jCheckBox1)))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
@@ -157,21 +153,17 @@ public class FormRegister1 extends javax.swing.JDialog {
                         .addComponent(jLabelSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTxtRegSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 279, Short.MAX_VALUE))))
+                        .addGap(0, 218, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(262, 262, 262)
+                .addGap(243, 243, 243)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jCheckBoxCond, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabelEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
@@ -192,31 +184,21 @@ public class FormRegister1 extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtRegPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelPassword)
-                    .addComponent(jButtonPrikaziLozinku2))
+                    .addComponent(jCheckBox2))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtRegPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jButtonPrikaziLozinku1))
-                .addGap(67, 67, 67)
+                    .addComponent(jCheckBox1))
+                .addGap(39, 39, 39)
                 .addComponent(jCheckBoxCond)
-                .addGap(60, 60, 60)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonPrikaziLozinku2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrikaziLozinku2ActionPerformed
-
-        jTxtRegPassword1.setEchoChar((char)0);
-    }//GEN-LAST:event_jButtonPrikaziLozinku2ActionPerformed
-
-    private void jButtonPrikaziLozinku1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrikaziLozinku1ActionPerformed
-
-        jTxtRegPassword.setEchoChar((char)0);
-    }//GEN-LAST:event_jButtonPrikaziLozinku1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
          String ime=jTxtRegName.getText();
@@ -337,8 +319,8 @@ public class FormRegister1 extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButtonPrikaziLozinku1;
-    private javax.swing.JButton jButtonPrikaziLozinku2;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBoxCond;
     private javax.swing.JComboBox<String> jComboBoxGender;
     private javax.swing.JLabel jLabel1;
@@ -411,8 +393,8 @@ public class FormRegister1 extends javax.swing.JDialog {
 
     private void updateTexts() {
         jButton1.setText(messages.getString("zavrsiReg.text"));
-        jButtonPrikaziLozinku1.setText(messages.getString("jButtonPrikaziLozinku.text"));
-        jButtonPrikaziLozinku2.setText(messages.getString("jButtonPrikaziLozinku.text"));
+        jCheckBox1.setText(messages.getString("jButtonPrikaziLozinku.text"));
+        jCheckBox2.setText(messages.getString("jButtonPrikaziLozinku.text"));
         
         jCheckBoxCond.setText(messages.getString("jCheckBoxCond.text"));
         
@@ -423,5 +405,42 @@ public class FormRegister1 extends javax.swing.JDialog {
         jLabel5.setText(messages.getString("jLabelPassword2.text"));
         jLabel4.setText(messages.getString("brojTelefona.text"));
         jLabelpol.setText(messages.getString("jLabelPol.text"));
+    }
+    
+        private void addListeners1() {jCheckBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPassword();
+            }
+
+            private void showPassword() {
+                if (jCheckBox1.isSelected()) {
+                    String password = new String(jTxtRegPassword1.getPassword());
+                    jTxtRegPassword1.setText(password);
+                    jTxtRegPassword1.setEchoChar((char) 0);
+
+                } else {
+                    jTxtRegPassword1.setEchoChar('\u2022');
+                }
+            }
+        });
+    }
+            private void addListeners2() {jCheckBox2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPassword();
+            }
+
+            private void showPassword() {
+                if (jCheckBox2.isSelected()) {
+                    String password = new String(jTxtRegPassword.getPassword());
+                    jTxtRegPassword.setText(password);
+                    jTxtRegPassword.setEchoChar((char) 0);
+
+                } else {
+                    jTxtRegPassword.setEchoChar('\u2022');
+                }
+            }
+        });
     }
 }

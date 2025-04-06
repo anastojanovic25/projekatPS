@@ -50,6 +50,7 @@ public class AddPerformance extends javax.swing.JDialog {
         
         loadLanguage();
         updateTexts();
+        azurirajTabelu();
     }
 
     /**

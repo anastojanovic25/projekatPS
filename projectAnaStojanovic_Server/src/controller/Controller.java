@@ -4,10 +4,13 @@
  */
 package controller;
 
+import java.sql.Connection;
 import communication.ClientRequest;
 import connection.DBBroker;
+import connection.DBConnection;
 import java.security.SecureRandom;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +62,9 @@ import soRepertoar.UpdateRepertoar;
 public class Controller {
     private static Controller instance;
     private DBBroker dbb;
+    private List<Korisnik> aktivniKorisnici = new ArrayList<>();
+    
+    
     public Controller(){
         try {
             dbb=DBBroker.getInstance();
@@ -70,6 +76,18 @@ public class Controller {
         if(instance==null)
             instance=new Controller();
         return instance;
+    }
+    
+    public void dodajAktivnogKorisnika(Korisnik korisnik) {
+        aktivniKorisnici.add(korisnik);
+    }
+
+    public void ukloniAktivnogKorisnika(Korisnik korisnik) {
+        aktivniKorisnici.remove(korisnik);
+    }
+
+    public List<Korisnik> getAktivniKorisnici() {
+        return aktivniKorisnici;
     }
    public List<Glumac> vratiListuGlumaca() throws Exception {
         GetGlumac so=new GetGlumac();
@@ -157,22 +175,73 @@ public class Controller {
     }
     public boolean dodajPredstavu2(HashMap<String, List<Object>> naziv) throws Exception {
         String key = naziv.keySet().iterator().next();
-        List<Object> listaObjekata = naziv.get(key);
+         List<Object> listaObjekata = naziv.get(key);
         Predstava p = (Predstava) listaObjekata.get(0);
         List<Glumac> glumci = (List<Glumac>) listaObjekata.get(1);
         List<String> uloge = (List<String>) listaObjekata.get(2);
 
-        int idPredstava=dodajPredstavu(p);
-        for (int i = 0; i < uloge.size(); i++) {
-            p.setId(idPredstava);
-            String uloga=uloge.get(i);
+        Connection conn = null;
 
-            int idUloga = dodajUlogu(uloga, p);
-            Uloga u=new Uloga(idUloga, uloga, p);
-          Glumac glumac = glumci.get(i);  
-            dodajGlumi(glumac, u);
+    try {
+        conn = (Connection) DBConnection.getInstance().getConnection();
+        conn.setAutoCommit(false); 
+
+        // Dodaj predstavu
+        AddPredstava addPredstava = new AddPredstava();
+        addPredstava.templateExecute(p, conn);
+        int idPredstava = addPredstava.getId();
+        p.setId(idPredstava);
+
+        // Dodavanje uloga i povezivanje glumaca
+        for (int i = 0; i < uloge.size(); i++) {
+            String nazivUloge = uloge.get(i);
+            Glumac glumac = glumci.get(i);
+
+            // Dodavanje uloge
+            Uloga u = new Uloga(0, nazivUloge, p);
+            AddUloga addUloga = new AddUloga();
+            addUloga.templateExecute(u, conn);
+            int idUloga = addUloga.getId();
+            u.setIdUloge(idUloga);
+
+            // Dodavanje veze glumac-uloga
+            Glumi g = new Glumi(glumac, u, 0);
+            AddGlumi addGlumi = new AddGlumi();
+            addGlumi.templateExecute(g, conn);
         }
+
+        conn.commit();
         return true;
+
+    } catch (Exception ex) {
+        if (conn != null) {
+            try {
+                conn.rollback(); 
+            } catch (Exception se) {
+                se.printStackTrace();
+            }
+        }
+        throw ex; 
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true); 
+            } catch (Exception se) {
+                se.printStackTrace();
+            }
+        }
+    }
+//        int idPredstava=dodajPredstavu(p);
+//        for (int i = 0; i < uloge.size(); i++) {
+//            p.setId(idPredstava);
+//            String uloga=uloge.get(i);
+//
+//            int idUloga = dodajUlogu(uloga, p);
+//            Uloga u=new Uloga(idUloga, uloga, p);
+//          Glumac glumac = glumci.get(i);  
+//            dodajGlumi(glumac, u);
+//        }
+       
     }
     
     public long ubaciRepertoar(Repertoar p) throws Exception {

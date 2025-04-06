@@ -33,7 +33,7 @@ import static operations.Operations.azurirajRepertoar;
  */
 public class ProcessingClientRequest extends Thread{
      private Socket s;
-
+     private Korisnik ulogovaniKorisnik;
     public ProcessingClientRequest(Socket s) {
         this.s = s;
     }
@@ -47,6 +47,11 @@ public class ProcessingClientRequest extends Thread{
                  ServerResponse serverResponse = new ServerResponse();
                  switch (clientRequest.getOperation()) {
                      //sve operacije
+                     case ulogujKorisnika:
+                         Korisnik aktivniKorisnik = (Korisnik) clientRequest.getParam();
+                         Controller.getInstance().dodajAktivnogKorisnika(aktivniKorisnik);
+                         ulogovaniKorisnik = aktivniKorisnik; // sačuvaj ulogovanog za kasnije uklanjanje
+                         break;
                      case vratiListuKorisnika:
                          List<Korisnik> lista=Controller.getInstance().vratiListuKorisnika();
                          serverResponse.setResponse(lista);
@@ -146,6 +151,9 @@ public class ProcessingClientRequest extends Thread{
                  
                  sendResponse(serverResponse);
              } catch (Exception ex) {
+                 if (ulogovaniKorisnik != null) {
+                    Controller.getInstance().ukloniAktivnogKorisnika(ulogovaniKorisnik);
+                 }
                  Logger.getLogger(ProcessingClientRequest.class.getName()).log(Level.SEVERE, null, ex);
              }
          }

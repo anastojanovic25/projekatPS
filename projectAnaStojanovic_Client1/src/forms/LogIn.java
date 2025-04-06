@@ -201,6 +201,8 @@ public class LogIn extends javax.swing.JFrame {
         
         for (Korisnik korisnik : listaKorisnika2) {
             if(korisnik.getEmail().equals(email) && korisnik.getPassword().equals(pass)){
+              Controller.getInstance().prijaviKorisnikaNaServer(korisnik);
+                
                 MainForm enterForm=new MainForm(korisnik, currentLocale);
                 enterForm.setVisible(true);
                

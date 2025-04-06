@@ -4,9 +4,11 @@
  */
 package connection;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,14 +21,19 @@ public class DBConnection {
     private Connection connection;
     
     private DBConnection(){
-        try {
-            String url="jdbc:mysql://localhost:3307/bazaprojekat";
-            String user="root";
-            String pass="";
-            connection=DriverManager.getConnection(url,user,pass);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         try {
+        Properties properties = new Properties();
+        properties.load(new FileInputStream("dbconfig.properties"));
+        String url = properties.getProperty("url");
+        String username = properties.getProperty("username");
+        String password = properties.getProperty("password");
+
+        connection = DriverManager.getConnection(url, username, password);
+        connection.setAutoCommit(true); // defaultno
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
     public static DBConnection getInstance(){
         if(instance==null){
