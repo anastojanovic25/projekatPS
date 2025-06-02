@@ -159,7 +159,7 @@ public class Korisnik extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         return "EMAIL";
     }
 

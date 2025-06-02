@@ -114,7 +114,7 @@ public class Glumac extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         return "";
     }
     

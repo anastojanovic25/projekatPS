@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author Ana
  */
-public class Glumi extends AbstractDomainObject{//fali
+public class Glumi extends AbstractDomainObject{
     private Glumac g;
     private Uloga uloga; 
     private long id;
@@ -94,7 +94,7 @@ public class Glumi extends AbstractDomainObject{//fali
 
     @Override
     public String uslov() {
-        return "id= "+id;
+        return "idGlumi= "+id;
     }
 
     @Override
@@ -104,7 +104,8 @@ public class Glumi extends AbstractDomainObject{//fali
 
     @Override
     public String valuesForUpdate(Object o) {
-        return "";
+        Glumac glumacNovi=(Glumac) o;
+        return "jmbg="+glumacNovi.getJmbg();
     }
 
     @Override
@@ -114,7 +115,7 @@ public class Glumi extends AbstractDomainObject{//fali
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         return "";
     }
 

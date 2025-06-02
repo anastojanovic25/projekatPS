@@ -34,4 +34,8 @@ public enum Operations {
     azurirajRepertoar2,
     dodajGlumca,
     azurirajGlumca,
+    ulogujKorisnika,
+    azuirajGlumi,
+    azurirajPredstavu,
+    
 }

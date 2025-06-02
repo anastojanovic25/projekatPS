@@ -6,8 +6,8 @@ package controller;
 
 import java.sql.Connection;
 import communication.ClientRequest;
-import connection.DBBroker;
-import connection.DBConnection;
+import dbb.DBBroker;
+import dbb.DBConnection;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ import soGlumac.GetGlumac;
 import soGlumac.UpdateGlumac;
 import soGlumi.AddGlumi;
 import soGlumi.GetGlumi;
+import soGlumi.UpdateGlumi;
 import soKoreograf.GetKoreograf;
 import soKorisnik.AddKorisnik;
 import soKorisnik.GetKorisnik;
@@ -48,6 +49,7 @@ import soKostimograf.GetKostimograf;
 import soPredstava.AddPredstava;
 import soPredstava.DeletePredstava;
 import soPredstava.GetPredstava;
+import soPredstava.UpdatePredstava;
 import soRepertoar.AddRepertoar;
 import soReziser.GetReziser;
 import soScenograf.GetScenograf;
@@ -173,9 +175,71 @@ public class Controller {
         so.templateExecute(g, null);
         return so.getId();
     }
-    public boolean dodajPredstavu2(HashMap<String, List<Object>> naziv) throws Exception {
-        String key = naziv.keySet().iterator().next();
-         List<Object> listaObjekata = naziv.get(key);
+    public boolean azurirajPredstavu(HashMap<String, List<Object>> objekti) throws Exception {
+        String key = objekti.keySet().iterator().next();
+         List<Object> listaObjekata = objekti.get(key);
+         Reziser r=(Reziser) listaObjekata.get(0);
+         Scenograf scenograf=(Scenograf) listaObjekata.get(1);
+         Kostimograf kom=(Kostimograf) listaObjekata.get(2);
+         Koreograf kor=(Koreograf) listaObjekata.get(3);
+         Predstava p = (Predstava) listaObjekata.get(6);
+        List<Glumac> glumci = (List<Glumac>) listaObjekata.get(4);
+        List<String> uloge = (List<String>) listaObjekata.get(5);
+           Connection conn = null;
+
+        try {
+            conn = (Connection) DBConnection.getInstance().getConnection();
+            conn.setAutoCommit(false); 
+            
+            Predstava pNova=new Predstava(p.getId(),p.getNaziv(), r, scenograf, kor, kom, p.getTrajanje(), p.getZanr(), p.getKorisnikUnos());
+            
+            UpdatePredstava updatePredstava=new UpdatePredstava();
+            
+            updatePredstava.templateExecute(pNova, pNova);
+            
+            for (int i = 0; i < uloge.size(); i++) {
+            String nazivUloge = uloge.get(i);
+            Glumac glumac = glumci.get(i);
+
+            // Dodavanje uloge
+            Uloga u = new Uloga(0, nazivUloge, pNova);
+            AddUloga addUloga = new AddUloga();
+            addUloga.templateExecute(u, conn);
+            int idUloga = addUloga.getId();
+            u.setIdUloge(idUloga);
+
+            // Dodavanje veze glumac-uloga
+            Glumi g = new Glumi(glumac, u, 0);
+            AddGlumi addGlumi = new AddGlumi();
+            addGlumi.templateExecute(g, conn);
+        }
+            
+            conn.commit();
+            return true;
+
+        } catch (Exception ex) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); 
+                } catch (Exception se) {
+                    se.printStackTrace();
+                }
+            }
+            throw ex; 
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); 
+                } catch (Exception se) {
+                    se.printStackTrace();
+                }
+        }
+    }
+
+    }
+    public boolean dodajPredstavu2(HashMap<String, List<Object>> objekti) throws Exception {
+        String key = objekti.keySet().iterator().next();
+         List<Object> listaObjekata = objekti.get(key);
         Predstava p = (Predstava) listaObjekata.get(0);
         List<Glumac> glumci = (List<Glumac>) listaObjekata.get(1);
         List<String> uloge = (List<String>) listaObjekata.get(2);
@@ -297,6 +361,16 @@ public class Controller {
         
         UpdateGlumac so=new UpdateGlumac();
         so.templateExecute(stari, novi);
+        return so.isUpdated();
+    }
+    public boolean azurirajGlumi(HashMap<String, List<Object>> objekti) throws Exception{
+        String key=objekti.keySet().iterator().next();
+        List<Object> listaObjekata=objekti.get(key);
+        Glumac g=(Glumac) listaObjekata.get(0);
+        Glumi gl=(Glumi) listaObjekata.get(1);
+        
+        UpdateGlumi so=new UpdateGlumi();
+        so.templateExecute(gl,g);
         return so.isUpdated();
     }
 

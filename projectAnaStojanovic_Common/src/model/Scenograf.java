@@ -113,7 +113,14 @@ public class Scenograf extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Scenograf that = (Scenograf) o;
+        return jmbg == that.jmbg;
     }
 }

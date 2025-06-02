@@ -4,7 +4,7 @@
  */
 package soGlumac;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import java.util.ArrayList;
 import model.AbstractDomainObject;
 import model.Glumac;
@@ -25,7 +25,7 @@ public class GetGlumac extends OpstaSO{
         }
     }
     @Override
-    protected void execute(AbstractDomainObject odo, Object o) throws Exception {
+    public void execute(AbstractDomainObject odo, Object o) throws Exception {
         ArrayList<AbstractDomainObject> listGlumac = DBBroker.getInstance().select(odo,o);
         list = (ArrayList<Glumac>) (ArrayList<?>) listGlumac;
     }

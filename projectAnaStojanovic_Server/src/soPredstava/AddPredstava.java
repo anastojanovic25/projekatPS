@@ -4,7 +4,7 @@
  */
 package soPredstava;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import model.AbstractDomainObject;
 import model.Predstava;
 import systemOperations.OpstaSO;

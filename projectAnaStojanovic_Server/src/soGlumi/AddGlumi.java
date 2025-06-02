@@ -4,7 +4,7 @@
  */
 package soGlumi;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import model.AbstractDomainObject;
 import model.Glumi;
 import systemOperations.OpstaSO;

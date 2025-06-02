@@ -23,5 +23,5 @@ public abstract class AbstractDomainObject implements Serializable{
     public abstract String valuesForInsert();
     public abstract String valuesForUpdate(Object o);
     public abstract String requirementForSelect(Object o);
-    public abstract String atributPretrazivanja();
+    public abstract String searchAttribute();
 }

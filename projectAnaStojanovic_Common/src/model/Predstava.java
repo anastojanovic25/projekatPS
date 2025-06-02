@@ -192,7 +192,8 @@ public class Predstava extends AbstractDomainObject{
 
     @Override
     public String valuesForUpdate(Object o) {
-        return "";
+        Predstava pNovi=(Predstava) o;
+        return "reziser="+pNovi.getReziser().getId()+", scenograf=" +pNovi.getScenograf().getJmbg() + ", kostimograf="+pNovi.getKostimograf().getJmbg()+", koreograf="+pNovi.getKoreograf().getJmbg();
     }
 
     @Override
@@ -201,7 +202,7 @@ public class Predstava extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

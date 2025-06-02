@@ -4,7 +4,7 @@
  */
 package soUloga;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import model.AbstractDomainObject;
 import model.Uloga;
 import systemOperations.OpstaSO;

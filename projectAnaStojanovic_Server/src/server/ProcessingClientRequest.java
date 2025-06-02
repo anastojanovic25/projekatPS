@@ -32,10 +32,14 @@ import static operations.Operations.azurirajRepertoar;
  * @author Ana
  */
 public class ProcessingClientRequest extends Thread{
-     private Socket s;
      private Korisnik ulogovaniKorisnik;
-    public ProcessingClientRequest(Socket s) {
+   
+    private Socket s;
+    private StartServer server;
+
+    public ProcessingClientRequest(Socket s, StartServer server) {
         this.s = s;
+        this.server = server;
     }
 
     @Override
@@ -46,11 +50,10 @@ public class ProcessingClientRequest extends Thread{
                  ClientRequest clientRequest = getRequest();
                  ServerResponse serverResponse = new ServerResponse();
                  switch (clientRequest.getOperation()) {
-                     //sve operacije
                      case ulogujKorisnika:
                          Korisnik aktivniKorisnik = (Korisnik) clientRequest.getParam();
                          Controller.getInstance().dodajAktivnogKorisnika(aktivniKorisnik);
-                         ulogovaniKorisnik = aktivniKorisnik; // sačuvaj ulogovanog za kasnije uklanjanje
+                         ulogovaniKorisnik = aktivniKorisnik; 
                          break;
                      case vratiListuKorisnika:
                          List<Korisnik> lista=Controller.getInstance().vratiListuKorisnika();
@@ -85,9 +88,13 @@ public class ProcessingClientRequest extends Thread{
                          serverResponse.setResponse(Controller.getInstance().obrisiPredstavuURepertoaru(r));
                          break;
                      case ubaciRepertoar:
-                         Repertoar r1=(Repertoar) clientRequest.getParam();
-                         serverResponse.setResponse(Controller.getInstance().ubaciRepertoar(r1));
-                         break;
+                           try {
+                                Repertoar r1 = (Repertoar) clientRequest.getParam();
+                                serverResponse.setResponse(Controller.getInstance().ubaciRepertoar(r1));
+                            } catch (Exception e) {
+                                serverResponse.setException(e);
+                            }
+                            break;
                      case azurirajRepertoar:
                          //Repertoar r2=(Repertoar) clientRequest.getParam();
                          HashMap<String, List<Object>> listaObjekti1=(HashMap<String, List<Object>>) clientRequest.getParam();
@@ -139,6 +146,10 @@ public class ProcessingClientRequest extends Thread{
                          HashMap<String, List<Object>> lista4=(HashMap<String, List<Object>>) clientRequest.getParam();
                          serverResponse.setResponse(Controller.getInstance().dodajPredstavu2(lista4));
                          break;
+                     case azurirajPredstavu:
+                         HashMap<String, List<Object>> listaPred=(HashMap<String, List<Object>>) clientRequest.getParam();
+                         serverResponse.setResponse(Controller.getInstance().azurirajPredstavu(listaPred));
+                         break;
                      case dodajGlumca:
                          Glumac g=(Glumac) clientRequest.getParam();
                          serverResponse.setResponse(Controller.getInstance().dodajGlumca(g));
@@ -147,16 +158,23 @@ public class ProcessingClientRequest extends Thread{
                          HashMap<String, List<Object>> lista5=(HashMap<String, List<Object>>) clientRequest.getParam();
                          serverResponse.setResponse(Controller.getInstance().azurirajGlumca(lista5));
                          break;
+                     case azuirajGlumi:
+                         HashMap<String, List<Object>> listaGlumi2=(HashMap<String, List<Object>>) clientRequest.getParam();
+                         serverResponse.setResponse(Controller.getInstance().azurirajGlumi(listaGlumi2));
+                         break;
                  }
                  
                  sendResponse(serverResponse);
-             } catch (Exception ex) {
+             
+        } catch (Exception ex) {
                  if (ulogovaniKorisnik != null) {
                     Controller.getInstance().ukloniAktivnogKorisnika(ulogovaniKorisnik);
                  }
                  Logger.getLogger(ProcessingClientRequest.class.getName()).log(Level.SEVERE, null, ex);
              }
-         }
+             
+        }
+         
     }
      private ClientRequest getRequest() {
         try {

@@ -4,7 +4,7 @@
  */
 package soRepertoar;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import java.sql.SQLException;
 import model.AbstractDomainObject;
 import model.Repertoar;

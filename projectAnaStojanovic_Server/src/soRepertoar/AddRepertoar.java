@@ -4,7 +4,8 @@
  */
 package soRepertoar;
 
-import connection.DBBroker;
+import dbb.DBBroker;
+import java.util.Date;
 import model.AbstractDomainObject;
 import model.Repertoar;
 import systemOperations.OpstaSO;
@@ -19,6 +20,13 @@ public class AddRepertoar extends OpstaSO{
     protected void validate(AbstractDomainObject ado) throws Exception {
         if (!(ado instanceof Repertoar)) {
             throw new Exception("Prosledjeni objekat nije instanca klase");
+        }
+        
+        Repertoar repertoar = (Repertoar) ado;
+
+    
+        if (repertoar.getDatum().before(new Date())) {
+            throw new Exception("Datum repertoara ne moze biti u proslosti.");
         }
     }
     @Override

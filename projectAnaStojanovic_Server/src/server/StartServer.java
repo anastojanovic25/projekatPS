@@ -7,8 +7,11 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Korisnik;
 
 /**
  *
@@ -17,6 +20,7 @@ import java.util.logging.Logger;
 public class StartServer extends Thread{
     private boolean running = true; 
     private ServerSocket serverSocket;
+    List<Socket> aktivniKlijenti=new ArrayList<>();
 
     @Override
     public void run() {
@@ -29,8 +33,10 @@ public class StartServer extends Thread{
                     System.out.println("Cekam");
                     Socket s = serverSocket.accept();
                     System.out.println("Klijent povezan");
-
-                    ProcessingClientRequest pcr = new ProcessingClientRequest(s);
+                    synchronized (aktivniKlijenti) {
+                        aktivniKlijenti.add(s);  
+                    }
+                    ProcessingClientRequest pcr = new ProcessingClientRequest(s, this);
                     pcr.start();
                 } catch (IOException e) {
                     if (running) {
@@ -48,10 +54,19 @@ public class StartServer extends Thread{
 
     public void stopServer() {
         running = false;
-        if (serverSocket != null && !serverSocket.isClosed()) {
+         for (Socket client : aktivniKlijenti) {
+                try {
+                    if (client != null && !client.isClosed()) {
+                        client.close();
+                    }
+                } catch (IOException e) {
+                    Logger.getLogger(StartServer.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+      if (serverSocket != null && !serverSocket.isClosed()) {
             try {
-                serverSocket.close(); 
-                System.out.println("Server zaustavljen");
+                serverSocket.close();
+                System.out.println("Server zaustavljen.");
             } catch (IOException e) {
                 Logger.getLogger(StartServer.class.getName()).log(Level.SEVERE, null, e);
             }

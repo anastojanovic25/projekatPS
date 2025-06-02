@@ -4,7 +4,7 @@
  */
 package soKorisnik;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import model.AbstractDomainObject;
 import model.Korisnik;
 import systemOperations.OpstaSO;
@@ -22,7 +22,7 @@ public class AddKorisnik extends OpstaSO{
         }
     }
     @Override
-    protected void execute(AbstractDomainObject ado, Object o) throws Exception {
+    public void execute(AbstractDomainObject ado, Object o) throws Exception {
        id = DBBroker.getInstance().insert(ado);
     }
 

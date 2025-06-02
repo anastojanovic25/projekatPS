@@ -4,7 +4,7 @@
  */
 package soGlumac;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import model.AbstractDomainObject;
 import model.Glumac;
 import systemOperations.OpstaSO;
@@ -22,7 +22,7 @@ public class AddGlumac extends OpstaSO{
         }
     }
     @Override
-    protected void execute(AbstractDomainObject ado, Object o) throws Exception {
+    public void execute(AbstractDomainObject ado, Object o) throws Exception {
        id = DBBroker.getInstance().insert(ado);
     }
 

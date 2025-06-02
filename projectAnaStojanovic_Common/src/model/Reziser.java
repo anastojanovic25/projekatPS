@@ -111,7 +111,16 @@ public class Reziser extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reziser that = (Reziser) o;
+        return id == that.id;
+    }
+    
 }

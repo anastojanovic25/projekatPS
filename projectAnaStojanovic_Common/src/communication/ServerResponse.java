@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class ServerResponse implements Serializable{
     private Object response;
+    private Exception exception;
 
     public ServerResponse() {
     }
@@ -26,5 +27,8 @@ public class ServerResponse implements Serializable{
 
     public void setResponse(Object response) {
         this.response = response;
+    }
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

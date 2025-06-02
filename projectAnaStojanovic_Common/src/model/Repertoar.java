@@ -207,7 +207,7 @@ public class Repertoar extends AbstractDomainObject{
     }
 
     @Override
-    public String atributPretrazivanja() {
+    public String searchAttribute() {
         return "";
     }
 }

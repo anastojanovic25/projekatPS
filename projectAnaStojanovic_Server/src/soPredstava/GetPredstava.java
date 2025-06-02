@@ -4,7 +4,7 @@
  */
 package soPredstava;
 
-import connection.DBBroker;
+import dbb.DBBroker;
 import java.util.ArrayList;
 import model.AbstractDomainObject;
 import model.Predstava;
